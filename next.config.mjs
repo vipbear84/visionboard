@@ -1,10 +1,8 @@
-import withPWA from 'next-pwa'
-
-const isProd = process.env.NODE_ENV === 'production'
-
-export default withPWA({
-  dest: 'public',
-  disable: !isProd,
-})({
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-})
+  // esto es opcional, pero ayuda a que ya no se queje:
+  turbopack: {},
+};
+
+export default nextConfig;
