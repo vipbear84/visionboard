@@ -13,3 +13,23 @@ model User {
   password  String
   createdAt DateTime @default(now())
 }
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  customer  String
+  status    String
+  amount    Decimal     @db.Decimal(10, 2)
+  createdAt DateTime    @default(now())
+  // relación 1 -> muchos
+  items     OrderItem[]
+}
+model OrderItem {
+  id      Int     @id @default(autoincrement())
+  orderId Int
+  product String
+  qty     Int     @default(1)
+  price   Decimal @db.Decimal(10, 2)
+
+  // relación hacia Order
+  order Order @relation(fields: [orderId], references: [id])
+}

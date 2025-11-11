@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
+import { prisma } from "../../../lib/prisma";
 
 export async function GET() {
-  const rows = Array.from({ length: 12 }).map((_, i) => ({
-    id: i + 1,
-    customer: ["Talayote","Wonderfields","Abogue","Byosberries"][i % 4],
-    status: ["Pagado","Pendiente","Cancelado"][i % 3],
-    amount: 1200 + i * 230,
+  // leemos las órdenes de la BD
+  const orders = await prisma.order.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 50,
+  });
+
+  // Prisma te regresa Decimal, fecha, etc. Lo normalizamos
+  const formatted = orders.map((o) => ({
+    id: o.id,
+    customer: o.customer,
+    status: o.status,
+    amount: Number(o.amount),      // <-- para que tu tabla pueda hacer toLocaleString
+    createdAt: o.createdAt,        // por si luego la muestras
   }));
-  return NextResponse.json(rows);
+
+  return NextResponse.json(formatted);
 }
