@@ -22,5 +22,7 @@ jobs:
             cd ~/apps/visionboard
             git pull
             npm install
+             npx prisma migrate deploy     # aplica las migraciones nuevas
+            npx prisma generate           # <--- ACTUALIZA EL CLIENTE
             NEXT_USE_TURBOPACK=0 npm run build
             pm2 restart visionboard
